@@ -6,8 +6,8 @@ public class ObstacleSpawner : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject obstacle;
-    private float timeToSpawn = 3f;
-    private float spawnCooldown = 3f;
+    private float timeToSpawn = 30f;
+    private float spawnCooldown = 30f;
 
     void SpawnLines()
     {
