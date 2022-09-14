@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class ObstacleDetroy : MonoBehaviour
 {
-    private float timeToDestroy = 5f;
-
     // Start is called before the first frame update
-    void Start()
+    void Update()
     {
-        Destroy(gameObject, timeToDestroy);
+        if(transform.position.z < -15)
+            Destroy(gameObject);
     }
 }

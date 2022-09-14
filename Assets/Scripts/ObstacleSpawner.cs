@@ -6,15 +6,15 @@ public class ObstacleSpawner : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject obstacle;
-    private float timeToSpawn = 30f;
-    private float spawnCooldown = 30f;
+    public float timeToSpawn = 5f;
+    public float spawnCooldown = 5f;
 
-    void SpawnLines()
+    void SpawnLines(int nbLines)
     {
         int maxIndex = spawnPoints.Length;
         Vector3 offset = new Vector3(0.0f, 0.0f, 40.0f);
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < nbLines; i++)
         {
             int randomIndex1 = Random.Range(0, maxIndex);
             int randomIndex2 = Random.Range(0, maxIndex);
@@ -24,7 +24,7 @@ public class ObstacleSpawner : MonoBehaviour
                 {
                     if ((j != randomIndex2))
                     {
-                        Instantiate(obstacle, spawnPoints[j].position + i * offset, Quaternion.identity);
+                        Instantiate(obstacle, spawnPoints[j].position + (4-i) * offset, Quaternion.identity);
                     }
                 }
             }
@@ -34,7 +34,7 @@ public class ObstacleSpawner : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        SpawnLines();
+        SpawnLines(4);
     }
 
     // Update is called once per frame
@@ -44,7 +44,7 @@ public class ObstacleSpawner : MonoBehaviour
         {
             if (Time.timeSinceLevelLoad >= timeToSpawn)
             {
-                SpawnLines();
+                SpawnLines(2);
                 timeToSpawn = Time.timeSinceLevelLoad + spawnCooldown;
             }
         }
