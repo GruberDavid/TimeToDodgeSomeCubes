@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class BonusMenu : MonoBehaviour
 {
+    public GameObject menu;
+
     public Player_Inventory inventory;
 
     public TMP_Dropdown dropdown;
@@ -14,40 +16,36 @@ public class BonusMenu : MonoBehaviour
 
     public void UpdateUI()
     {
-        itemList = new List<Item>();
-        List<Item_Life> ilList = inventory.getItemsLife();
-        foreach(Item_Life item in ilList)
-        {
-            itemList.Add(item);
-        }
-        List<Item_Slow> isList = inventory.getItemsSlow();
-        foreach (Item_Slow item in isList)
-        {
-            itemList.Add(item);
-        }
-        List<Item_Multiplicator> imList = inventory.getItemsMultiplicator();
-        foreach (Item_Multiplicator item in imList)
-        {
-            itemList.Add(item);
-        }
+        inventory.LoadItems();
+        itemList = inventory.items;
 
-        List<string> optionList = new List<string>();
+        List<string> optionList = new()
+        {
+            "No item"
+        };
         foreach (Item item in itemList)
         {
-            optionList.Add(item.getName());
+            optionList.Add(item.getName() + " lvl " + item.getRarity());
         }
 
+        dropdown.ClearOptions();
         dropdown.AddOptions(optionList);
     }
 
     public void ActivateItem()
     {
         Debug.Log("Activate selected item");
-        int index = dropdown.value;
+        int index = dropdown.value-1;
+
+        if (index >= 0)
+        {
+            inventory.ActivateItem(index);
+        }
     }
 
     public void LeaveBonusMenu()
     {
+        menu.SetActive(true);
         gameObject.SetActive(false);
     }
 }

@@ -58,20 +58,20 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
+    <Compile Include="Assets\Scripts\Item_Slow.cs" />
     <Compile Include="Assets\Scripts\RestartOrQuit.cs" />
+    <Compile Include="Assets\Scripts\BonusMenu.cs" />
     <Compile Include="Assets\Scripts\Menu.cs" />
+    <Compile Include="Assets\Scripts\Item_Life.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Player_Inventory.cs" />
+    <Compile Include="Assets\Scripts\Item.cs" />
     <Compile Include="Assets\Scripts\ObstacleSpawner.cs" />
     <Compile Include="Assets\Scripts\ObstacleDetroy.cs" />
     <Compile Include="Assets\Scripts\ObstacleMovement.cs" />
     <Compile Include="Assets\Scripts\Score.cs" />
-    <Compile Include="Assets\Scripts\PlayerCollision.cs" />
-    <Compile Include="Assets\Scripts\Item_Life.cs" />
-    <Compile Include="Assets\Scripts\Item_Slow.cs" />
-    <Compile Include="Assets\Scripts\Player_Inventory.cs" />
     <Compile Include="Assets\Scripts\Item_Multiplicator.cs" />
-    <Compile Include="Assets\Scripts\Item.cs" />
-    <Compile Include="Assets\Scripts\BonusMenu.cs" />
+    <Compile Include="Assets\Scripts\PlayerCollision.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

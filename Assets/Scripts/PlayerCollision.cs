@@ -10,19 +10,22 @@ public class PlayerCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == ("Obstacle"))
+        if (collision.gameObject.CompareTag(("Obstacle")))
         {
             Debug.Log("NB COLLISION : " + nbCollision);
             nbCollision++;
             movement.disableCollision();
             movement.enabled = false;
 
-            Item item = inventory.getActivatedItem();
+            Item item = inventory.GetActivatedItem();
 
             if (item != null)
             {
                 if (item.use_effect() == 1 && item.getName() == "Item_Life")
                 {
+                    if (item.getUsed() >= item.getRarity())
+                        inventory.items.Remove(item);
+
                     movement.enabled = true;
                     Destroy(collision.gameObject);
                     movement.enableCollision();
@@ -31,7 +34,7 @@ public class PlayerCollision : MonoBehaviour
                 }
             }
 
-            inventory.drop_item();
+            inventory.Drop_item();
 
             FindObjectOfType<GameManager>().EndGame();
         }

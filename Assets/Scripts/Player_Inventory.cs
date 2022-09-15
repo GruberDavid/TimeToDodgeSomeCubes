@@ -7,160 +7,254 @@ using System;
 public class Player_Inventory : MonoBehaviour
 {
 
-	public List<Item> items;
+    public List<Item> items;
 
-/*
-	private float taux_drop_item_life = 0.2;
-	private float taux_drop_item_multiplicator = 0.5;
-	private float taux_drop_item_slow = 0.3;
-*/
+
+    private int taux_drop_item_life = 20;
+    private int taux_drop_item_multiplicator = 50;
+    private int taux_drop_item_slow = 30;
+
+    private int taux_drop_lvl1 = 55;
+    private int taux_drop_lvl2 = 30;
+    private int taux_drop_lvl3 = 15;
+
 
     // Start is called before the first frame update
     void Start()
     {
-    	this.loadItems();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.LoadItems();
     }
 
     //Charger les items depuis un fichier
-    public void loadItems(){
-    	items = new List<Item>();
-    	string stringItems = "";
-    	string line;
-    	try
+    public void LoadItems()
+    {
+        items = new List<Item>();
+        string stringItems = "";
+        string line;
+        try
         {
-            
-            StreamReader sr = new StreamReader("./Items.txt");
-           	line = sr.ReadLine();
+
+            StreamReader sr = new("./Items.txt");
+            line = sr.ReadLine();
             while (line != null)
             {
-                stringItems = stringItems + line;
+                stringItems += line;
                 line = sr.ReadLine();
             }
-               
+
             sr.Close();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Debug.Log("Exception: " + e.Message);
         }
         finally
         {
-        	string[] tempStringItems = stringItems.Split("+");
+            string[] tempStringItems = stringItems.Split("+");
+            for (int i = 0; i < tempStringItems.Length - 1; i++)
+            {
 
-        	for(int i = 0; i < tempStringItems.Length -1; i++) {
+                string[] stringItem = tempStringItems[i].Split("-");
+                int rarityItem = int.Parse(stringItem[1]);
+                int nb_use = int.Parse(stringItem[2]);
+                bool activated = bool.Parse(stringItem[3]);
 
-        		string[] stringItem = tempStringItems[i].Split("-");
-        		int rarityItem = int.Parse(stringItem[1]);
-        		int nb_use = int.Parse(stringItem[2]);
+                if (stringItem[0] == "Item_Life")
+                {
+                    Item_Life item_life = new(rarityItem, nb_use, activated);
+                    items.Add(item_life);
+                }
+                if (stringItem[0] == "Item_Slow")
+                {
+                    Item_Slow item_slow = new(rarityItem, nb_use, activated);
+                    items.Add(item_slow);
+                }
+                if (stringItem[0] == "Item_Multiplicator")
+                {
+                    Item_Multiplicator item_multiplicator = new(rarityItem, nb_use, activated);
+                    items.Add(item_multiplicator);
+                }
+            }
 
-        		if(stringItem[0] == "Item_Life") {
-        			Item_Life item_life = new Item_Life(rarityItem, nb_use);
-        			items.Add(item_life);
-        		}
-        		if(stringItem[0] == "Item_Slow") {
-        			Item_Slow item_slow = new Item_Slow(rarityItem, nb_use);
-        			items.Add(item_slow);
-        		}
-        		if(stringItem[0] == "Item_Multiplicator") {
-        			Item_Multiplicator item_multiplicator = new Item_Multiplicator(rarityItem, nb_use);
-        			items.Add(item_multiplicator);
-        		}
-        	}
-        	
             Debug.Log("Chargement des items depuis le fichier effectué");
 
         }
     }
 
     //Enregistrer les items dans un fichier
-    public void saveItems(){
-    	try
-		{
+    public void SaveItems()
+    {
+        try
+        {
 
-		    StreamWriter sw = new StreamWriter("./Items.txt");
-		    for(int i =0; i < items.Count; i++){
-			    sw.WriteLine(items[i].getName() + "-" + items[i].getRarity() + "-" + items[i].getUsed() + "+");
-    		}
-		    
-		    sw.Close();
-		}
-		catch(Exception e)
-		{
-		    Debug.Log("Exception: " + e.Message);
-		}
-		finally
-		{
-		    Debug.Log("\nFichier modifié");
-		}
+            StreamWriter sw = File.CreateText("./Items.txt");
+            for (int i = 0; i < items.Count; i++)
+            {
+                sw.WriteLine(items[i].getName() + "-" + items[i].getRarity() + "-" + items[i].getUsed() + "-" + items[i].getActivated() + "+");
+            }
+
+            sw.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Exception: " + e.Message);
+        }
+        finally
+        {
+            Debug.Log("\nFichier modifié");
+        }
     }
-       
+
     //Génération d'un item
-    public void drop_item(){  
-    	Debug.Log("\nDROP Items Player_Inventory");
-    	Item_Life test_item_life = new Item_Life(2, 0);
-    	this.items.Add(test_item_life);
-    	this.saveItems();
+    public void Drop_item()
+    {
+        Debug.Log("\nDROP Items Player_Inventory");
+
+        System.Random rnd = new();
+        int num = rnd.Next(0, 100);
+        int num2 = rnd.Next(0, 100);
+
+        Debug.Log("\nnum : " + num);
+        Debug.Log("\n num2 : " + num2);
+
+
+        if (num < taux_drop_item_life)
+        {
+            if (num2 < taux_drop_lvl1)
+            {
+                Item_Life item = new(1, 0, false);
+                this.items.Add(item);
+            }
+            else if (num2 < taux_drop_lvl2 + taux_drop_lvl1)
+            {
+                Item_Life item = new(2, 0, false);
+                this.items.Add(item);
+            }
+            else
+            {
+                Item_Life item = new(3, 0, false);
+                this.items.Add(item);
+            }
+        }
+        else if (num < taux_drop_item_life + taux_drop_item_slow)
+        {
+            if (num2 < taux_drop_lvl1)
+            {
+                Item_Slow item = new(1, 0, false);
+                this.items.Add(item);
+            }
+            else if (num2 < taux_drop_lvl2 + taux_drop_lvl1)
+            {
+                Item_Slow item = new(2, 0, false);
+                this.items.Add(item);
+            }
+            else
+            {
+                Item_Slow item = new(3, 0, false);
+                this.items.Add(item);
+            }
+        }
+        else
+        {
+            if (num2 < taux_drop_lvl1)
+            {
+                Item_Multiplicator item = new(1, 0, false);
+                this.items.Add(item);
+            }
+            else if (num2 < taux_drop_lvl2 + taux_drop_lvl1)
+            {
+                Item_Multiplicator item = new(2, 0, false);
+                this.items.Add(item);
+            }
+            else
+            {
+                Item_Multiplicator item = new(3, 0, false);
+                this.items.Add(item);
+            }
+        }
+
+
+
+        this.SaveItems();
     }
 
-    public Item getActivatedItem(){
-    	if(items == null) {
-    		return null;
-    	}
-    	for(int i =0; i < items.Count; i++){
-    		if(items[i].getActivated()){
-    			return items[i];
-    		}
-    	}
-    	return null;
+    public Item GetActivatedItem()
+    {
+        if (items == null)
+        {
+            return null;
+        }
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].getActivated())
+            {
+                return items[i];
+            }
+        }
+        return null;
     }
 
-    public List<Item_Life> getItemsLife() {
-    	if(items == null) {
-    		return null;
-    	}
-    	List<Item_Life> return_Items = new List<Item_Life>();
-    	for(int i =0; i < items.Count; i++){
-    		if(items[i].getName() == "Item_Life"){
-    			Item_Life temp_item_life = new Item_Life(items[i].getRarity(), items[i].getUsed());
-    			return_Items.Add(temp_item_life);
-    		}
-    	}
-    	return return_Items;
+    public List<Item_Life> GetItemsLife()
+    {
+        if (items == null)
+        {
+            return null;
+        }
+        List<Item_Life> return_Items = new();
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].getName() == "Item_Life")
+            {
+                Item_Life temp_item_life = new(items[i].getRarity(), items[i].getUsed(), items[i].getActivated());
+                return_Items.Add(temp_item_life);
+            }
+        }
+        return return_Items;
     }
 
-    public List<Item_Slow> getItemsSlow() {
-    	if(items == null) {
-    		return null;
-    	}
-    	List<Item_Slow> return_Items = new List<Item_Slow>();
-    	for(int i =0; i < items.Count; i++){
-    		if(items[i].getName() == "Item_Slow"){
-    			Item_Slow temp_item_slow = new Item_Slow(items[i].getRarity(), items[i].getUsed());
-    			return_Items.Add(temp_item_slow);
-    		}
-    	}
-    	return return_Items;
+    public List<Item_Slow> GetItemsSlow()
+    {
+        if (items == null)
+        {
+            return null;
+        }
+        List<Item_Slow> return_Items = new();
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].getName() == "Item_Slow")
+            {
+                Item_Slow temp_item_slow = new(items[i].getRarity(), items[i].getUsed(), items[i].getActivated());
+                return_Items.Add(temp_item_slow);
+            }
+        }
+        return return_Items;
     }
 
-    public List<Item_Multiplicator> getItemsMultiplicator() {
-    	if(items == null) {
-    		return null;
-    	}
-    	List<Item_Multiplicator> return_Items = new List<Item_Multiplicator>();
-    	for(int i =0; i < items.Count; i++){
-    		if(items[i].getName() == "Item_Multiplicator"){
-    			Item_Multiplicator temp_item_multiplicator = new Item_Multiplicator(items[i].getRarity(), items[i].getUsed());
-    			return_Items.Add(temp_item_multiplicator);
-    		}
-    	}
-    	return return_Items;
+    public List<Item_Multiplicator> GetItemsMultiplicator()
+    {
+        if (items == null)
+        {
+            return null;
+        }
+        List<Item_Multiplicator> return_Items = new();
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].getName() == "Item_Multiplicator")
+            {
+                Item_Multiplicator temp_item_multiplicator = new(items[i].getRarity(), items[i].getUsed(), items[i].getActivated());
+                return_Items.Add(temp_item_multiplicator);
+            }
+        }
+        return return_Items;
     }
 
+    public void ActivateItem(int index)
+    {
+        for(int i=0; i < items.Count; i++)
+        {
+            items[i].activated = (i == index);
 
+        }
+        
+    }
 }

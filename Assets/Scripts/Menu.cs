@@ -16,6 +16,7 @@ public class Menu : MonoBehaviour
     {
         bonusMenu.gameObject.SetActive(true);
         bonusMenu.UpdateUI();
+        gameObject.SetActive(false);
     }
 
     public void ExitGame()
