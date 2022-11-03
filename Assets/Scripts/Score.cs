@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour
 {
     public Transform player;
-    int score;
+    public int score;
     public Text scoreText;
+    private int multiplicator = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -21,8 +22,17 @@ public class Score : MonoBehaviour
     {
         if (!FindObjectOfType<GameManager>().isGameOver())
         {
-            score = Mathf.FloorToInt(Time.timeSinceLevelLoad) * 100;
+            score = Mathf.FloorToInt(Time.timeSinceLevelLoad) * 100 * multiplicator;
             scoreText.text = score.ToString();
         }
     }
+
+    public void setMultiplicator(int new_multiplicator) {
+        this.multiplicator = new_multiplicator;
+    }
+
+    public int getMultiplicator(){
+        return this.multiplicator;
+    }
+
 }

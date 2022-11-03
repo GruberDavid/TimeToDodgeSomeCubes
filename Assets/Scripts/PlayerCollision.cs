@@ -8,11 +8,17 @@ public class PlayerCollision : MonoBehaviour
     public Player_Inventory inventory;
     private int nbCollision = 0;
 
+    public Life life;
+
+    public AudioSource myAudio;
+    public AudioClip collisionSound;
+    public ObstacleMovement obstacleMovement;
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag(("Obstacle")))
         {
-            Debug.Log("NB COLLISION : " + nbCollision);
+            myAudio.PlayOneShot(collisionSound);
             nbCollision++;
             movement.disableCollision();
             movement.enabled = false;
@@ -26,15 +32,16 @@ public class PlayerCollision : MonoBehaviour
                     if (item.getUsed() >= item.getRarity())
                         inventory.items.Remove(item);
 
+                    life.SetLife(life.lifePoints-1);
                     movement.enabled = true;
                     Destroy(collision.gameObject);
                     movement.enableCollision();
-                    Debug.Log("\nCA REPART\n");
                     return;
                 }
             }
 
             inventory.Drop_item();
+            obstacleMovement.speed = 20f;
 
             FindObjectOfType<GameManager>().EndGame();
         }

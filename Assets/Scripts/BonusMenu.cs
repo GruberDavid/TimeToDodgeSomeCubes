@@ -43,6 +43,12 @@ public class BonusMenu : MonoBehaviour
         }
     }
 
+    public void SaveBonus()
+    {
+        inventory.SaveItems();
+        LeaveBonusMenu();
+    }
+
     public void LeaveBonusMenu()
     {
         menu.SetActive(true);

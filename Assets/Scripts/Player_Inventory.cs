@@ -18,11 +18,19 @@ public class Player_Inventory : MonoBehaviour
     private int taux_drop_lvl2 = 30;
     private int taux_drop_lvl3 = 15;
 
+    public Score score;
 
     // Start is called before the first frame update
     void Start()
     {
         this.LoadItems();
+        if(this.GetActivatedItem() == null) {
+            return;
+        }
+        if(this.GetActivatedItem().getName() == "Item_Multiplicator"){
+            score.setMultiplicator(this.GetActivatedItem().getRarity() + 1);
+            this.items.Remove(this.GetActivatedItem());
+        }
     }
 
     //Charger les items depuis un fichier
@@ -108,14 +116,9 @@ public class Player_Inventory : MonoBehaviour
     //Génération d'un item
     public void Drop_item()
     {
-        Debug.Log("\nDROP Items Player_Inventory");
-
         System.Random rnd = new();
         int num = rnd.Next(0, 100);
         int num2 = rnd.Next(0, 100);
-
-        Debug.Log("\nnum : " + num);
-        Debug.Log("\n num2 : " + num2);
 
 
         if (num < taux_drop_item_life)

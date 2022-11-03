@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameOverUI.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -31,11 +32,8 @@ public class GameManager : MonoBehaviour
         if (!gameOver)
         {
             gameOver = true;
-            Debug.Log("DED");
             gameOverUI.SetActive(true);
             FinalScoreText.text = $"Final Score : " +  ScoreSrc.text;
-            Debug.Log(FinalScoreText.text);
-
         }
     }
 

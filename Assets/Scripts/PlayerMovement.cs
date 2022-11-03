@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
     public float sideForce = 200f;
     public float jumpForce = 500f;
+    public AudioSource myAudio;
+    public AudioClip jumpSound;
+
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -26,6 +30,9 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(0, jumpForce, 0, ForceMode.Impulse);
             isGrounded = false;
+            //play jump sound
+            myAudio.PlayOneShot(jumpSound);
+
         }
 
         if(rb.position.y < -1f)
